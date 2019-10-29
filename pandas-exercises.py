@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 # uncomment these two lines so you can see all the records when you print or write instead of dot dot dot ...
@@ -7,7 +8,7 @@ import pandas as pd
 
 
 def pretty_print(name, to_print):
-    print(f'{name}:')
+    print(f'{name} ')
     print(f'{to_print}\n\n')
 
 
@@ -17,6 +18,11 @@ f = open("data/output.txt", "w+")
 
 def pretty_write(name, to_write):
     f.write(f'{name}:\r')
+    f.write(f'{to_write}\n\n')
+
+
+def pretty_write2(name, to_write):
+    f.write(f'{name} ')
     f.write(f'{to_write}\n\n')
 
 
@@ -45,8 +51,9 @@ pretty_print("2.5 shape", insurance.shape)
 pretty_write("2.5 shape", insurance.shape)
 
 # info()
+
 pretty_print("2.6 info()", insurance.info())
-pretty_write("2.6 info()", insurance.info())
+pretty_write("2.6 info()", insurance.info(buf=f))
 
 # describe()
 pretty_print("2.7 describe()", insurance.describe())
@@ -74,7 +81,53 @@ pretty_write("6.1 average of charges", round(insurance['charges'].mean(), 2))
 pretty_write("6.2 mininum of charges", round(insurance['charges'].min(), 2))
 pretty_write("6.3 maximum of charges", round(insurance['charges'].max(), 2))
 
+# print age and sex of the person that paid 10797.3362.  Was he/she a smoker
+
+data1 = insurance[insurance['charges'] == 10797.3362]
+print(f'7.1 The age of the person is', data1['age'].to_string(index=False))
+print(f'7.2 The person is a', data1['sex'].to_string(index=False))
+print(f'7.3 Is the person a smoker? ', data1['smoker'].to_string(index=False))
+
+pretty_write2(f'7.1 The age of the person is ', data1['age'].to_string(index=False))
+pretty_write2(f'7.2 The person is a', data1['sex'].to_string(index=False))
+pretty_write2(f'7.3 Is the person a smoker? ', data1['smoker'].to_string(index=False))
+
+# what is the age of the person who paid the maximum charge?
+max_c = insurance[insurance['charges'] == insurance['charges'].max()]
+
+print(f'8. The age of the person that paid the maximum charge is ', max_c['age'].to_string(index=False))
+pretty_write2(f'8. The age of the person that paid the maximum charge is ', max_c['age'].to_string(index=False))
+
+# How many insured people do we have for each region?
+# note:  Per line, there is the main insured plus the number of children in the children column.
+# so the total insured per line is the main insured plus the children
+
+insurance['InsuredPerRow'] = 1 + insurance['children']  # needs to sum the self insured plus the children count
+pretty_print("9. New Data frame ", insurance.to_string())
+pretty_write("9. New Data frame ", insurance.to_string())
+
+insurance.rename(columns={'InsuredPerRow': 'Insured'}, inplace=True)  # rename the InsuredPerRow to Insured
+pretty_print("9. Insured by Region ", insurance.groupby(['region']).agg({'Insured': 'sum'}))
+pretty_write("9. Insured by Region ", insurance.groupby(['region']).agg({'Insured': 'sum'}))
+
+# then drop the newly created column to have the original dataframe
+insurance.drop('Insured', axis=1, inplace= True)
+
+# How many insured people are children?
+pretty_print("10. Insured children total is ", insurance['children'].sum())
+pretty_write("10. Insured children total is ", insurance['children'].sum())
+
+# correlation
+
+pretty_print("11. Correlation ", insurance.corr().to_string())
+pretty_write("11. Correlation ", insurance.corr().to_string())
 
 
+# correlation analysis
+# 12. 0 Using the Corr() it seems my assumptions are correct:
+# 12.1 There is a correlation between age and charges.  The higher the age, the higher the insurance charge
+# 12.2 The BMI has more correlation to Charges compared with the number of children.
 
 
+# pretty_print("4. columns age, children and charges", insurance[['bmi', 'children', 'charges']].to_string())
+# pretty_print("11. Correlation ", insurance[['bmi', 'children', 'charges']].corr().to_string())
