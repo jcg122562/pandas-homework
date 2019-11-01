@@ -131,3 +131,5 @@ pretty_write("11. Correlation ", insurance.corr().to_string())
 
 # pretty_print("4. columns age, children and charges", insurance[['bmi', 'children', 'charges']].to_string())
 # pretty_print("11. Correlation ", insurance[['bmi', 'children', 'charges']].corr().to_string())
+
+

@@ -2779,6 +2779,5 @@ southwest      696
 age       1.000000  0.109272  0.042469  0.299008
 bmi       0.109272  1.000000  0.012759  0.198341
 children  0.042469  0.012759  1.000000  0.067998
-charges   0.299008  0.198341  0.067998  1.000000
+charges   0.299008  0.198341  0.067998  1.00000012. My assumption that age is correlated with charges is moderately positively shown in the correlation.It could be the data itself.  However, I could say that age has a stronger correlation with charges compared to BMI and number of children.
 
-12. My assumption is correct that age has a stronger correlation with charges compare with BMI and number of children.Maybe only with this data, but the correlation of age with charges can be read as moderately positively correlated.
